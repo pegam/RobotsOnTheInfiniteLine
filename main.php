@@ -9,11 +9,13 @@ try {
     $leftRobot = new Robot(0);
     $rightRobot = new Robot(random_int(0, 1000));//random_int(0, PHP_INT_MAX)
     $instructionsGenerator = new InstructionsGenerator();
-    $instructionsLeftRobot = $instructionsGenerator->generate();
-    $divergenceCalculator = new DivergenceCalculator();
-    $divergenceLeftRobot = $divergenceCalculator->calculate(
-        $instructionsLeftRobot, $leftRobot->getStartPosition(), $rightRobot->getStartPosition()
-    );
+    do {
+        $instructionsLeftRobot = $instructionsGenerator->generate();
+        $divergenceCalculator = new DivergenceCalculator();
+        $divergenceLeftRobot = $divergenceCalculator->calculate(
+            $instructionsLeftRobot, $leftRobot->getStartPosition(), $rightRobot->getStartPosition()
+        );
+    } while (bccomp($divergenceLeftRobot, '-1', 10) !== 1);
     $instructionsRightRobot = $instructionsGenerator->generate();
     $instructionsRightRobot = $instructionsGenerator->tweak(
         $instructionsRightRobot, $divergenceLeftRobot, $rightRobot->getStartPosition(), $leftRobot->getStartPosition()
